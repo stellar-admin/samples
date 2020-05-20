@@ -1,4 +1,6 @@
-﻿using StellarAdmin.EntityFrameworkCore.Resources;
+﻿using System.Collections.Generic;
+using StellarAdmin.EntityFrameworkCore.Resources;
+using StellarAdmin.Fields;
 using Store.Models;
 
 namespace Store.Stellar.Resources
@@ -7,11 +9,22 @@ namespace Store.Stellar.Resources
     {
         public CategoryDefinition(StoreContext dbContext) : base(dbContext)
         {
-            HasField(c => c.Id, f => f.IsKey = true);
-            HasField(c => c.Name);
-            HasField(c => c.Description, f => f.HideOnList());
-            
             HasDisplay(c => c.Name);
+        }
+
+        protected override IEnumerable<IField> CreateFields()
+        {
+            return new IField[]
+            {
+                CreateField(c => c.Id,
+                    f =>
+                    {
+                        f.IsKey = true;
+                        f.Hide();
+                    }),
+                CreateField(c => c.Name),
+                CreateField(c => c.Description, f => f.HideOnList())
+            };
         }
     }
 }

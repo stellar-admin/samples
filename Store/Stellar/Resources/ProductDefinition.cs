@@ -1,5 +1,6 @@
-﻿using StellarAdmin.Editors;
+﻿using System.Collections.Generic;
 using StellarAdmin.EntityFrameworkCore.Resources;
+using StellarAdmin.Fields;
 using Store.Models;
 
 namespace Store.Stellar.Resources
@@ -8,13 +9,21 @@ namespace Store.Stellar.Resources
     {
         public ProductDefinition(StoreContext dbContext) : base(dbContext)
         {
-            HasField(p => p.Id, f =>
+        }
+
+        protected override IEnumerable<IField> CreateFields()
+        {
+            return new IField[]
             {
-                f.IsKey = true;
-            });
-            HasField(p => p.Name);
-            HasOne(p => p.Category, f => f.UseEditor<ReferencedResourceEditor>());
-            HasField(p => p.Description, f => f.HideOnList());
+                CreateField(p => p.Id, f =>
+                {
+                    f.IsKey = true;
+                    f.Hide();
+                }),
+                CreateField(p => p.Name),
+                CreateReferenceField(p => p.Category),
+                CreateField(p => p.Description, f => f.HideOnList())
+            };
         }
     }
 }
