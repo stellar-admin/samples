@@ -86,26 +86,6 @@ namespace ContactList.Stellar.Resources
             return Task.FromResult(new ValidationResult());
         }
 
-        protected override IEnumerable<IField> CreateFields()
-        {
-            return new IField[]
-            {
-                CreateField(c => c.Id,
-                    field =>
-                    {
-                        field.IsKey = true;
-                        field.HideOnList();
-                        field.HideOnForms();
-                        field.HideOnDetail();
-                    }),
-                CreateField(c => c.FirstName),
-                CreateField(c => c.LastName),
-                CreateField(c => c.EmailAddress),
-                CreateField(c => c.PhoneNumber),
-                CreateField(c => c.Type)
-            };
-        }
-
         private Contact FindContact(object key)
         {
             return _contactDatabase.Contacts.FirstOrDefault(c => c.Id == new Guid(key.ToString()));

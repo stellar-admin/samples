@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace ContactList.Data
 {
@@ -8,6 +9,7 @@ namespace ContactList.Data
 
         public string FirstName { get; set; }
 
+        [Key]
         public Guid Id { get; set; }
 
         public string LastName { get; set; }
