@@ -45,7 +45,7 @@ namespace Store
                 var categories = new Faker<Category>()
                     .RuleFor(c => c.Name, f => f.Commerce.Department(1))
                     .RuleFor(c => c.Description, f => f.Lorem.Paragraph())
-                    .Generate(20);
+                    .Generate(10);
                 context.Categories.AddRange(categories);
                 context.SaveChanges();
             }
@@ -70,7 +70,8 @@ namespace Store
 
                 var orders = new Faker<Order>()
                     .RuleFor(o => o.Customer, f => f.PickRandom<Customer>(context.Customers))
-                    .RuleFor(o => o.OrderDate, f => f.Date.Recent())
+                    .RuleFor(o => o.OrderDate, f => f.Date.Past())
+                    .RuleFor(o => o.DeliveryDate, (f, o) => f.Date.Soon(60, o.OrderDate).OrNull(f, 0.15F))
                     .RuleFor(o => o.ShipStreetAddress, f => f.Address.StreetAddress())
                     .RuleFor(o => o.ShipCity, f => f.Address.City())
                     .RuleFor(o => o.ShipCountry, f => f.Address.Country())

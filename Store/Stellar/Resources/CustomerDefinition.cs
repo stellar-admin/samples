@@ -9,6 +9,7 @@ namespace Store.Stellar.Resources
     {
         public CustomerDefinition(StoreContext dbContext) : base(dbContext)
         {
+            HasDisplay(c => c.FirstName + " " + c.LastName);
         }
 
         protected override IEnumerable<IField> CreateFields()

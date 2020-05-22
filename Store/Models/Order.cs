@@ -9,7 +9,9 @@ namespace Store.Models
         [Required]
         public Customer Customer { get; set; }
 
-        public string CustomerId { get; set; }
+        public int CustomerId { get; set; }
+
+        public DateTime? DeliveryDate { get; set; }
 
         public int Id { get; set; }
 
