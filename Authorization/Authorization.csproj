@@ -15,8 +15,8 @@
         <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.4" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.4" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.4" />
-        <PackageReference Include="StellarAdmin" Version="0.12.0" />
-        <PackageReference Include="StellarAdmin.EntityFrameworkCore" Version="0.12.0" />
+        <PackageReference Include="StellarAdmin" Version="0.13.0" />
+        <PackageReference Include="StellarAdmin.EntityFrameworkCore" Version="0.13.0" />
     </ItemGroup>
 
 </Project>
