@@ -5,6 +5,8 @@ using Store.Models;
 
 namespace Store.Stellar.Resources
 {
+    using StellarAdmin;
+
     public class ProductDefinition : EfCoreResourceDefinition<StoreContext, Product>
     {
         public ProductDefinition(StoreContext dbContext) : base(dbContext)
@@ -22,7 +24,7 @@ namespace Store.Stellar.Resources
                 }),
                 CreateField(p => p.Name),
                 CreateReferenceField(p => p.Category),
-                CreateField(p => p.Description, f => f.HideOnList())
+                CreateField(p => p.Description, f => f.Hide(ViewType.List))
             };
         }
     }

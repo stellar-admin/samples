@@ -6,6 +6,8 @@ using StellarAdmin.Fields;
 
 namespace Authorization.Stellar.Resources
 {
+    using StellarAdmin;
+
     public class UserDefinition : EfCoreResourceDefinition<ApplicationDbContext, IdentityUser>
     {
         public UserDefinition(ApplicationDbContext dbContext) : base(dbContext)
@@ -18,7 +20,7 @@ namespace Authorization.Stellar.Resources
             {
                 CreateField(u => u.Id),
                 CreateField(u => u.Email),
-                CreateField(u => u.TwoFactorEnabled, f => f.HideOnForms())
+                CreateField(u => u.TwoFactorEnabled, f => f.Hide(ViewType.Create, ViewType.Update))
             };
         }
     }

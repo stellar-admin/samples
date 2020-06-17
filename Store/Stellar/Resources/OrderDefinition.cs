@@ -6,6 +6,8 @@ using Store.Models;
 
 namespace Store.Stellar.Resources
 {
+    using StellarAdmin;
+
     public class OrderDefinition : EfCoreResourceDefinition<StoreContext, Order>
     {
         public OrderDefinition(StoreContext dbContext) : base(dbContext)
@@ -27,7 +29,7 @@ namespace Store.Stellar.Resources
                     f =>
                     {
                         f.Label = "Delivered";
-                        f.HideOnForms();
+                        f.Hide(ViewType.Create, ViewType.Update);
                     }, name: "IsDelivered"),
                 CreateField(o => o.DeliveryDate,
                     f =>
@@ -36,22 +38,22 @@ namespace Store.Stellar.Resources
                     }),
                 CreateField(o => o.ShipStreetAddress, f =>
                 {
-                    f.HideOnList();
+                    f.Hide(ViewType.List);
                     f.Label = "Address";
                 }),
                 CreateField(o => o.ShipCity, f =>
                 {
-                    f.HideOnList();
+                    f.Hide(ViewType.List);
                     f.Label = "City";
                 }),
                 CreateField(o => o.ShipCountry, f =>
                 {
-                    f.HideOnList();
+                    f.Hide(ViewType.List);
                     f.Label = "Country";
                 }),
                 CreateField(o => o.ShipPostalCode, f =>
                 {
-                    f.HideOnList();
+                    f.Hide(ViewType.List);
                     f.Label = "Postal code";
                 }),
             };
