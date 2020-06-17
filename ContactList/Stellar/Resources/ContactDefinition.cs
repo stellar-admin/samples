@@ -17,6 +17,11 @@ namespace ContactList.Stellar.Resources
         public ContactDefinition(ContactDatabase contactDatabase)
         {
             _contactDatabase = contactDatabase;
+
+            ConfigureOptions = options =>
+            {
+                options.Search.Allow = true;
+            };
         }
 
         public override Task<ValidationResult> CreateAsync(IDictionary<string, string> values)
@@ -55,9 +60,16 @@ namespace ContactList.Stellar.Resources
             var skip = (query.PageNo - 1) * query.PageSize;
             var take = query.PageSize;
 
-            var count = _contactDatabase.Contacts.Count;
-            var contacts = _contactDatabase.Contacts
-                .OrderBy(c => c.LastName)
+            IEnumerable<Contact> contacts = _contactDatabase.Contacts;
+            if (!string.IsNullOrEmpty(query.Search))
+            {
+                contacts = contacts.Where(c =>
+                    c.FirstName.Contains(query.Search, StringComparison.CurrentCultureIgnoreCase)
+                    || c.LastName.Contains(query.Search, StringComparison.CurrentCultureIgnoreCase));
+            }
+            var count = contacts.Count();
+
+            contacts = contacts.OrderBy(c => c.LastName)
                 .Skip(skip)
                 .Take(take);
 
