@@ -25,8 +25,12 @@ namespace Store.Stellar.Resources
             return new IField[]
             {
                 CreateField(c => c.Id),
-                CreateField(c => c.Name),
-                CreateField(c => c.Description, f => f.Hide(ViewType.List))
+                CreateField(c => c.Name, f => f.Sort.Allow = true),
+                CreateField(c => c.Description, f =>
+                {
+                    f.Sort.Allow = true;
+                    f.Hide(ViewType.List);
+                })
             };
         }
 

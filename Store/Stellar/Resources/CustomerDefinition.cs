@@ -42,9 +42,9 @@ namespace Store.Stellar.Resources
                     f.Hide(ViewType.Create, ViewType.Update);
                 }),
                 CreateField(c => $"{c.FirstName} {c.LastName}", name: "Fullname"),
-                CreateField(c => c.FirstName),
-                CreateField(c => c.LastName),
-                CreateField(c => c.Email),
+                CreateField(c => c.FirstName, f => f.Sort.Allow = true),
+                CreateField(c => c.LastName, f => f.Sort.Allow = true),
+                CreateField(c => c.Email, f => f.Sort.Allow = true),
                 CreateField(c => c.StreetAddress, f => f.Hide(ViewType.List)),
                 CreateField(c => c.City, f => f.Hide(ViewType.List)),
                 CreateField(c => c.Country, f => f.Hide(ViewType.List)),
