@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ContactList.Data;
-using StellarAdmin.Fields;
-using StellarAdmin.Models;
-using StellarAdmin.Resources;
-using StellarAdmin.Validation;
-
-namespace ContactList.Stellar.Resources
+﻿namespace ContactList.Stellar.Resources
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Data;
+    using StellarAdmin.Fields;
+    using StellarAdmin.Models;
+    using StellarAdmin.Resources;
+    using StellarAdmin.Validation;
+
     public class ContactDefinition : ResourceDefinition<Contact>
     {
         private readonly ContactDatabase _contactDatabase;
@@ -18,10 +18,7 @@ namespace ContactList.Stellar.Resources
         {
             _contactDatabase = contactDatabase;
 
-            ConfigureOptions = options =>
-            {
-                options.Search.Allow = true;
-            };
+            ConfigureOptions = options => { options.Search.Allow = true; };
         }
 
         public override Task<ValidationResult> CreateAsync(IDictionary<string, string> values)
@@ -61,16 +58,32 @@ namespace ContactList.Stellar.Resources
             var take = query.PageSize;
 
             IEnumerable<Contact> contacts = _contactDatabase.Contacts;
+
+            // Apply search criteria
             if (!string.IsNullOrEmpty(query.Search))
-            {
                 contacts = contacts.Where(c =>
                     c.FirstName.Contains(query.Search, StringComparison.CurrentCultureIgnoreCase)
                     || c.LastName.Contains(query.Search, StringComparison.CurrentCultureIgnoreCase));
-            }
             var count = contacts.Count();
 
-            contacts = contacts.OrderBy(c => c.LastName)
-                .Skip(skip)
+            // Apply sort criteria
+            contacts = (query.OrderByField, query.OrderByDirection) switch
+            {
+                ("FirstName", SortDirection.Ascending) => contacts.OrderBy(contact => contact.FirstName),
+                ("FirstName", SortDirection.Descending) => contacts.OrderByDescending(contact => contact.FirstName),
+                ("LastName", SortDirection.Ascending) => contacts.OrderBy(contact => contact.LastName),
+                ("LastName", SortDirection.Descending) => contacts.OrderByDescending(contact => contact.LastName),
+                ("EmailAddress", SortDirection.Ascending) => contacts.OrderBy(contact => contact.EmailAddress),
+                ("EmailAddress", SortDirection.Descending) => contacts.OrderByDescending(contact => contact.EmailAddress),
+                ("PhoneNumber", SortDirection.Ascending) => contacts.OrderBy(contact => contact.PhoneNumber),
+                ("PhoneNumber", SortDirection.Descending) => contacts.OrderByDescending(contact => contact.PhoneNumber),
+                ("Type", SortDirection.Ascending) => contacts.OrderBy(contact => contact.Type),
+                ("Type", SortDirection.Descending) => contacts.OrderByDescending(contact => contact.Type),
+                _ => contacts
+            };
+
+            // Apply paging
+            contacts = contacts.Skip(skip)
                 .Take(take);
 
             var pagedContactList = new PagedResourceList(contacts, query.PageNo, query.PageSize, count);
@@ -96,6 +109,19 @@ namespace ContactList.Stellar.Resources
             }
 
             return Task.FromResult(new ValidationResult());
+        }
+
+        protected override IEnumerable<IField> CreateFields()
+        {
+            return new[]
+            {
+                CreateField(contact => contact.Id),
+                CreateField(contact => contact.FirstName, f => f.Sort.Allow = true),
+                CreateField(contact => contact.LastName, f => f.Sort.Allow = true),
+                CreateField(contact => contact.EmailAddress, f => f.Sort.Allow = true),
+                CreateField(contact => contact.PhoneNumber, f => f.Sort.Allow = true),
+                CreateField(contact => contact.Type, f => f.Sort.Allow = true)
+            };
         }
 
         private Contact FindContact(object key)
