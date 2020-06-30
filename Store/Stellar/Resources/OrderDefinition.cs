@@ -23,38 +23,38 @@ namespace Store.Stellar.Resources
                 CreateField(o => o.OrderDate,
                     f =>
                     {
-                        f.Label = "Order date";
+                        f.Display.Label = "Order date";
                     }),
                 CreateField(o => !(o.DeliveryDate == null),
                     f =>
                     {
-                        f.Label = "Delivered";
+                        f.Display.Label = "Delivered";
                         f.Hide(ViewType.Create, ViewType.Update);
                     }, name: "IsDelivered"),
                 CreateField(o => o.DeliveryDate,
                     f =>
                     {
-                        f.Label = "Delivery date";
+                        f.Display.Label = "Delivery date";
                     }),
                 CreateField(o => o.ShipStreetAddress, f =>
                 {
                     f.Hide(ViewType.List);
-                    f.Label = "Address";
+                    f.Display.Label = "Address";
                 }),
                 CreateField(o => o.ShipCity, f =>
                 {
                     f.Hide(ViewType.List);
-                    f.Label = "City";
+                    f.Display.Label = "City";
                 }),
                 CreateField(o => o.ShipCountry, f =>
                 {
                     f.Hide(ViewType.List);
-                    f.Label = "Country";
+                    f.Display.Label = "Country";
                 }),
                 CreateField(o => o.ShipPostalCode, f =>
                 {
                     f.Hide(ViewType.List);
-                    f.Label = "Postal code";
+                    f.Display.Label = "Postal code";
                 }),
             };
         }
