@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using StellarAdmin;
+using StellarAdmin.Views;
 
 namespace Authorization
 {
@@ -36,19 +38,21 @@ namespace Authorization
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.AddControllers(o =>
-            {
-                o.Filters.Add(new StellarApiAuthorizationFilter());
-            });
+            services.AddControllers();
             services.AddAuthorization(o =>
             {
                 o.AddPolicy("IsAdministrator", builder => builder.RequireRole("Administrator"));
             });
-            services.AddRazorPages(o =>
+            services.AddRazorPages();
+            services.AddStellarAdmin(builder =>
             {
-                o.Conventions.AuthorizePage("/StellarAdmin", "IsAdministrator");
+                builder.AddEntityResource<ApplicationDbContext, IdentityUser>(rb =>
+                {
+                    rb.AddField(u => u.Email);
+                    rb.AddField(u => u.TwoFactorEnabled,
+                        f => f.IsVisible(context => context.View == View.ResourceIndexView || context.View == View.ResourceDetailView));
+                });
             });
-            services.AddStellarAdmin();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -79,7 +83,7 @@ namespace Authorization
                 endpoints.MapControllers();
                 endpoints.MapRazorPages();
                 
-                endpoints.MapStellarAdmin();
+                endpoints.MapStellarAdmin().RequireAuthorization("IsAdministrator");
             });
         }
     }
