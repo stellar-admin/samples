@@ -8,8 +8,8 @@
       <PackageReference Include="Bogus" Version="33.0.2" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.7" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.7" />
-      <PackageReference Include="StellarAdmin" Version="0.20.0" />
-      <PackageReference Include="StellarAdmin.EntityFrameworkCore" Version="0.20.0" />
+      <PackageReference Include="StellarAdmin" Version="0.23.0" />
+      <PackageReference Include="StellarAdmin.EntityFrameworkCore" Version="0.23.0" />
     </ItemGroup>
 
 </Project>
