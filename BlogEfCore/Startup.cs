@@ -88,7 +88,7 @@ namespace BlogEfCore
                             : posts.OrderByDescending(p => p.Author.Name)));
                     rb.AddField(b => b.Content, f => f.HasEditor<MarkdownEditor>());
 
-                    rb.AddPanel(pb =>
+                    rb.AddSection(pb =>
                     {
                         pb.HasTitle("Publication Information");
                         pb.HasSubTitle("Various bits and pieces related to the blog post's publication");

@@ -113,7 +113,7 @@ namespace Store
                             f.HasLabel("Order date");
                             f.AllowSort();
                         });
-                    rb.AddPanel(panel =>
+                    rb.AddSection(panel =>
                     {
                         panel.HasTitle("Delivery Status");
                         panel.AddField(o => !(o.DeliveryDate == null),
@@ -131,7 +131,7 @@ namespace Store
                                 f.HasLabel("Delivery date");
                             });
                     });
-                    rb.AddPanel(panel =>
+                    rb.AddSection(panel =>
                     {
                         panel.HasTitle("Shipping address");
                         panel.HasSubTitle("The addressed to which this order is shipped");
