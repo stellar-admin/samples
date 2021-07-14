@@ -61,7 +61,7 @@ namespace BlogEfCore
                         var request = context.HttpContext.Request;
                             
                         var linkGenerator = context.RequestServices.GetRequiredService<LinkGenerator>();
-                        editor.UploadUrl = linkGenerator.GetUriByAction(context.HttpContext, "UploadFile", "ImageUpload");
+                        editor.UploadUrl = linkGenerator.GetUriByAction(context.HttpContext, "UploadFile", "Uploads");
                         editor.UrlPrefix = $"{request.Scheme}://{request.Host}{request.PathBase}/uploads/images/";
                         editor.AltText = "Photo of author";
                     }));
@@ -86,7 +86,14 @@ namespace BlogEfCore
                         f => f.AllowSort((posts, direction) => direction == SortDirection.Ascending
                             ? posts.OrderBy(p => p.Author.Name)
                             : posts.OrderByDescending(p => p.Author.Name)));
-                    rb.AddField(b => b.Content, f => f.HasEditor<MarkdownEditor>());
+                    rb.AddField(b => b.Content, f =>
+                    {
+                        f.HasEditor<MarkdownEditor>((editor, context) =>
+                        {
+                            var linkGenerator = context.RequestServices.GetRequiredService<LinkGenerator>();
+                            editor.ImageUploadUrl = linkGenerator.GetUriByAction(context.HttpContext, "UploadMarkdownEditorImage", "Uploads");
+                        });
+                    });
 
                     rb.AddSection(pb =>
                     {
