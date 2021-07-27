@@ -40,11 +40,14 @@ namespace Store
                     rb.ConfigureOptions(options => options.Search.Allow = true);
                     rb.ConfigureDataSource(options =>
                     {
-                        options.ApplyFilter = (categories, searchTerm) =>
+                        options.ApplyFilters = (categories, criteria) =>
                         {
-                            return string.IsNullOrEmpty(searchTerm)
-                                ? categories
-                                : categories.Where(category => EF.Functions.Like(category.Name, $"%{searchTerm}%"));
+                            if (!string.IsNullOrEmpty(criteria.SearchTerm))
+                            {
+                                categories = categories.Where(category => EF.Functions.Like(category.Name, $"%{criteria.SearchTerm}%"));
+                            }
+
+                            return categories;
                         };
                     });
                     rb.HasDisplay(c => c.Name);
@@ -62,15 +65,31 @@ namespace Store
                     rb.ConfigureOptions(options => options.Search.Allow = true);
                     rb.ConfigureDataSource(options =>
                     {
-                        options.ApplyFilter = (customers, searchTerm) =>
+                        options.ApplyFilters = (customers, criteria) =>
                         {
-                            return string.IsNullOrEmpty(searchTerm)
-                                ? customers
-                                : customers.Where(customer => EF.Functions.Like(customer.FirstName, $"%{searchTerm}%")
-                                                              || EF.Functions.Like(customer.LastName, $"%{searchTerm}%"));
+                            if (!string.IsNullOrEmpty(criteria.SearchTerm))
+                            {
+                                customers = customers.Where(customer => EF.Functions.Like(customer.FirstName, $"%{criteria.SearchTerm}%")
+                                                                        || EF.Functions.Like(customer.LastName, $"%{criteria.SearchTerm}%"));
+                            }
+
+                            switch (criteria.Segment)
+                            {
+                                case "with-orders":
+                                    customers = customers.Where(c => c.Orders.Any());
+                                    break;
+                                case "without-orders":
+                                    customers = customers.Where(c => !c.Orders.Any());
+                                    break;
+                            }
+
+                            return customers;
                         };
                     });
                     rb.HasDisplay(c => c.FirstName + " " + c.LastName);
+                    
+                    rb.AddSegment("with-orders", "With orders");
+                    rb.AddSegment("without-orders", "Without orders");
 
                     rb.AddField(c => $"{c.FirstName} {c.LastName}", f => f.HasName("Fullname"));
                     rb.AddField(c => c.FirstName, f => f.AllowSort());
@@ -95,7 +114,22 @@ namespace Store
                 });
                 builder.AddEntityResource<StoreContext, Order>(rb =>
                 {
-                    rb.ConfigureDataSource(options => options.GetBaseQuery = orders => orders.OrderByDescending(o => o.OrderDate));
+                    rb.ConfigureDataSource(options =>
+                    {
+                        options.GetBaseQuery = orders => orders.OrderByDescending(o => o.OrderDate);
+                        options.ApplyFilters = (orders, criteria) =>
+                        {
+                            switch (criteria.Segment)
+                            {
+                                case "undelivered":
+                                    orders = orders.Where(o => o.DeliveryDate == null);
+                                    break;
+                            }
+                            return orders;
+                        };
+                    });
+                    
+                    rb.AddSegment("undelivered", "Undelivered");
 
                     rb.AddField(o => o.Id);
                     rb.AddField(o => o.Customer,

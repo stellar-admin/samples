@@ -103,10 +103,10 @@ namespace ContactList
                             IEnumerable<Contact> contacts = contactDatabase.Contacts;
 
                             // Apply search criteria
-                            if (!string.IsNullOrEmpty(request.Query.Search))
+                            if (!string.IsNullOrEmpty(request.Query.Filter.SearchTerm))
                                 contacts = contacts.Where(c =>
-                                    c.FirstName.Contains(request.Query.Search, StringComparison.CurrentCultureIgnoreCase)
-                                    || c.LastName.Contains(request.Query.Search, StringComparison.CurrentCultureIgnoreCase));
+                                    c.FirstName.Contains(request.Query.Filter.SearchTerm, StringComparison.CurrentCultureIgnoreCase)
+                                    || c.LastName.Contains(request.Query.Filter.SearchTerm, StringComparison.CurrentCultureIgnoreCase));
                             var count = contacts.Count();
 
                             // Apply sort criteria

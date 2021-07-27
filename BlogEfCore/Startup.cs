@@ -44,9 +44,14 @@ namespace BlogEfCore
                 {
                     rb.ConfigureDataSource(options =>
                     {
-                        options.ApplyFilter = (authors, s) =>
+                        options.ApplyFilters = (authors, criteria) =>
                         {
-                            return authors.Where(a => EF.Functions.Like(a.Name, $"%{s}%") || EF.Functions.Like(a.Bio, $"%{s}%"));
+                            if (!string.IsNullOrEmpty(criteria.SearchTerm))
+                            {
+                                authors = authors.Where(a => EF.Functions.Like(a.Name, $"%{criteria.SearchTerm}%") || EF.Functions.Like(a.Bio, $"%{criteria.SearchTerm}%"));
+                            }
+                            
+                            return authors;
                         };
                     });
                     rb.ConfigureOptions(options =>
@@ -71,9 +76,14 @@ namespace BlogEfCore
                 {
                     rb.ConfigureDataSource(options =>
                     {
-                        options.ApplyFilter = (blogPosts, s) =>
+                        options.ApplyFilters = (blogPosts, criteria) =>
                         {
-                            return blogPosts.Where(b => EF.Functions.Like(b.Title, $"%{s}%"));
+                            if (!string.IsNullOrEmpty(criteria.SearchTerm))
+                            {
+                                blogPosts = blogPosts.Where(b => EF.Functions.Like(b.Title, $"%{criteria.SearchTerm}%"));
+                            }
+
+                            return blogPosts;
                         };
                     });
                     rb.ConfigureOptions(options =>
