@@ -6,7 +6,7 @@ using StellarAdmin.Context;
 
 namespace BlogEfCore.StellarAdmin.Actions
 {
-    public class PublishBlogPostAction : FormResourceAction<PublishBlogPostModel>
+    public class PublishBlogPostAction : FormResourceActionHandler<PublishBlogPostModel>
     {
         private readonly BlogDbContext _dbContext;
 

@@ -11,8 +11,9 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using StellarAdmin.DataSources;
+using StellarAdmin.Fields;
 using StellarAdmin.Helpers;
-using StellarAdmin.Resources;
 using StellarAdmin.Validation;
 
 namespace ContactList

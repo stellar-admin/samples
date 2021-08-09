@@ -1,17 +1,13 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using StellarAdmin;
-using StellarAdmin.Resources;
+using StellarAdmin.Fields;
 using StellarAdmin.Views;
 using Store.Models;
 
@@ -52,6 +48,8 @@ namespace Store
                     });
                     rb.HasDisplay(c => c.Name);
                     
+                    rb.AddCollection<Product>();
+                    
                     rb.AddField(c => c.Name, f => f.AllowSort());
                     rb.AddField(c => c.Description,
                         f =>
@@ -90,6 +88,8 @@ namespace Store
                     
                     rb.AddSegment("with-orders", "With orders");
                     rb.AddSegment("without-orders", "Without orders");
+                    
+                    rb.AddCollection<Order>();
 
                     rb.AddField(c => $"{c.FirstName} {c.LastName}", f => f.HasName("Fullname"));
                     rb.AddField(c => c.FirstName, f => f.AllowSort());

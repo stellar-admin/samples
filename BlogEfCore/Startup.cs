@@ -1,13 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using BlogEfCore.Data;
 using BlogEfCore.StellarAdmin.Actions;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -15,8 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using StellarAdmin;
 using StellarAdmin.Editors;
-using StellarAdmin.Resources;
-using StellarAdmin.Views;
+using StellarAdmin.Fields;
 
 namespace BlogEfCore
 {
@@ -59,6 +55,8 @@ namespace BlogEfCore
                         options.Search.Allow = true;
                     });
                     rb.HasDisplay(a => a.Name);
+
+                    rb.AddCollection<BlogPost>(cb => cb.UseForeignKey(post => post.AuthorId));
                     
                     rb.AddField(a => a.Name, f => f.AllowSort());
                     rb.AddField(a => a.Photo, f => f.HasEditor<ImageEditor>((editor, context) =>
@@ -123,7 +121,7 @@ namespace BlogEfCore
                             });
                     });
                     
-                    rb.AddFormAction<PublishBlogPostAction, PublishBlogPostModel>("Publish", a =>
+                    rb.AddAction<PublishBlogPostAction, PublishBlogPostModel>("Publish", a =>
                     {
                         a.HasDialogTitle("Publish Blog Post");
                         a.HasDialogTitle("Specify the date on which the blog post must be published");
