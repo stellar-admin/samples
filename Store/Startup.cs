@@ -46,7 +46,7 @@ namespace Store
                             return categories;
                         };
                     });
-                    rb.HasDisplay(c => c.Name);
+                    rb.HasTitle(c => c.Name);
                     
                     rb.AddCollection<Product>();
                     
@@ -84,7 +84,7 @@ namespace Store
                             return customers;
                         };
                     });
-                    rb.HasDisplay(c => c.FirstName + " " + c.LastName);
+                    rb.HasTitle(c => c.FirstName + " " + c.LastName);
                     
                     rb.AddSegment("with-orders", "With orders");
                     rb.AddSegment("without-orders", "Without orders");

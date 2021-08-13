@@ -54,7 +54,7 @@ namespace BlogEfCore
                     {
                         options.Search.Allow = true;
                     });
-                    rb.HasDisplay(a => a.Name);
+                    rb.HasTitle(a => a.Name);
 
                     rb.AddCollection<BlogPost>(cb => cb.UseForeignKey(post => post.AuthorId));
                     
