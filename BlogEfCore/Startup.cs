@@ -40,7 +40,7 @@ namespace BlogEfCore
                 {
                     rb.ConfigureDataSource(options =>
                     {
-                        options.ApplyFilters = (authors, criteria) =>
+                        options.OnApplyFilters = (authors, criteria) =>
                         {
                             if (!string.IsNullOrEmpty(criteria.SearchTerm))
                             {
@@ -74,7 +74,7 @@ namespace BlogEfCore
                 {
                     rb.ConfigureDataSource(options =>
                     {
-                        options.ApplyFilters = (blogPosts, criteria) =>
+                        options.OnApplyFilters = (blogPosts, criteria) =>
                         {
                             if (!string.IsNullOrEmpty(criteria.SearchTerm))
                             {

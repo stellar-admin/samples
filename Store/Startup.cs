@@ -36,7 +36,7 @@ namespace Store
                     rb.ConfigureOptions(options => options.Search.Allow = true);
                     rb.ConfigureDataSource(options =>
                     {
-                        options.ApplyFilters = (categories, criteria) =>
+                        options.OnApplyFilters = (categories, criteria) =>
                         {
                             if (!string.IsNullOrEmpty(criteria.SearchTerm))
                             {
@@ -63,7 +63,7 @@ namespace Store
                     rb.ConfigureOptions(options => options.Search.Allow = true);
                     rb.ConfigureDataSource(options =>
                     {
-                        options.ApplyFilters = (customers, criteria) =>
+                        options.OnApplyFilters = (customers, criteria) =>
                         {
                             if (!string.IsNullOrEmpty(criteria.SearchTerm))
                             {
@@ -116,8 +116,8 @@ namespace Store
                 {
                     rb.ConfigureDataSource(options =>
                     {
-                        options.GetBaseQuery = orders => orders.OrderByDescending(o => o.OrderDate);
-                        options.ApplyFilters = (orders, criteria) =>
+                        options.ObGetBaseQuery = orders => orders.OrderByDescending(o => o.OrderDate);
+                        options.OnApplyFilters = (orders, criteria) =>
                         {
                             switch (criteria.Segment)
                             {

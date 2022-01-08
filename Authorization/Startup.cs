@@ -48,9 +48,28 @@ namespace Authorization
             {
                 builder.AddEntityResource<ApplicationDbContext, IdentityUser>(rb =>
                 {
+                    rb.ConfigureOptions(options =>
+                    {
+                        options.Meta.SingularLabel = "User";
+                        options.Meta.PluralLabel = "Users";
+                    });
+                    
+                    rb.HasTitle(u => u.Email);
+                    
                     rb.AddField(u => u.Email);
                     rb.AddField(u => u.TwoFactorEnabled,
                         f => f.IsVisible(context => context.View == View.ResourceIndexView || context.View == View.ResourceDetailView));
+                });
+                builder.AddEntityResource<ApplicationDbContext, IdentityRole>(rb =>
+                {
+                    rb.ConfigureOptions(options =>
+                    {
+                        options.Meta.SingularLabel = "Role";
+                        options.Meta.PluralLabel = "Roles";
+                    });
+                    
+                    rb.HasTitle(r => r.Name);
+                    rb.AddField(r => r.Name);
                 });
             });
         }
